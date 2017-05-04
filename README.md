@@ -2,8 +2,9 @@
 Ansible playbook to configure a host client with services for Icinga2
 
 ## Dependencies
-- python requests
-- python-httplib2
+- curl in target host
+- python requests in target host
+- python-httplib2 in target host
 
 ## Tests
 Tested with: 
