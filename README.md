@@ -17,4 +17,5 @@ Tested with:
 Run with ansible-playbook icinga2-client.yml --private-key=\<ident-file\> -u \<conection-user\> -i \<target-host-ip\>,
 
 Configure desired environment in vars/icinga-vars.yml and vars/services.yml
+
 Read the readmes at scripts/ and vars/ for more information
