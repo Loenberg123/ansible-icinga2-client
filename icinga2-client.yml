@@ -5,6 +5,12 @@
       - vars/services.yml
 
   tasks:
+     - name: Ensure that icinga repo exist
+       apt_repository:
+         repo=ppa:formorer/icinga
+         state=present
+       when: ansible_distribution == 'Ubuntu'
+
      - name: Update apt cache if too old
        apt:
          update_cache=yes cache_valid_time=14400
