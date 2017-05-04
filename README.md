@@ -11,6 +11,11 @@ Tested with:
 - ansible 2.3.0.0
 - Python 2.7.12
 
+Tested in:
+- Ubuntu 16.04
+- Ubuntu 14.04
+- Debian jessie
+
 ## Use 
 *Must have login with keys setup*
 
