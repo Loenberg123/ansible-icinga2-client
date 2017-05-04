@@ -10,6 +10,7 @@ Ansible playbook to configure a host client with services for Icinga2
 Tested with: 
 - ansible 2.3.0.0
 - Python 2.7.12
+- Python 2.7.6
 
 Tested in:
 - Ubuntu 16.04
