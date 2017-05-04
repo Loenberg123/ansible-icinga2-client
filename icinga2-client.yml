@@ -21,7 +21,7 @@
 
      - name: Install python requests
        pip:
-         name=requests state=present
+         name=requests state=latest
 
      - name: Update apt cache if too old
        apt:
