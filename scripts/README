@@ -1,0 +1,8 @@
+####################################################################################
+###									         ###
+###				CONFIGURATION OPTIONAL 			         ###
+###									         ###
+####################################################################################
+
+In this directory are located the plugins to be copied on the target host.
+Place your personal check plugins here and next configure the file vars/services.yml
