@@ -11,6 +11,17 @@
          state=present
        when: ansible_distribution == 'Ubuntu'
 
+     - name: Install pip / httplib2
+       apt:
+         name={{ item }} state=present
+       with_items:
+         - python-pip
+         - python-httplib2
+
+     - name: Install python requests
+       pip:
+         name=requests state=present
+
      - name: Update apt cache if too old
        apt:
          update_cache=yes cache_valid_time=14400
