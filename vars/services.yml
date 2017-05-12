@@ -11,4 +11,7 @@ services:
       telegraf-noinput.py -Q -i {{ influxdb_ip }} -d {{ influx_db }} -H {{ hostname }} -t {{ telegraf_time }}
     plugin:
       telegraf-noinput.py
+  - name: procs
+    command:
+      check_procs
 ...

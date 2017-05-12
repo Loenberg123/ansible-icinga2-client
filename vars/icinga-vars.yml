@@ -1,11 +1,6 @@
 icinga_ip: 192.168.202.44
-host_ip: "{{ ansible_default_ipv4.address }}"
-hostname: "{{ ansible_hostname }}"
 api_user: root
 api_pass: root
 checks_path: "/usr/lib/nagios/plugins/"
 validate: no
 scripts_path: scripts/
-influxdb_ip: 192.168.202.12
-influx_db: telegraf
-telegraf_time: 50s
