@@ -2,6 +2,7 @@
 - hosts: all
   vars_files:
       - vars/icinga-vars.yml
+      - vars/influx.yml
       - vars/services.yml
 
   tasks:
@@ -33,19 +34,19 @@
 
      - name: Create Icinga2 host object through API
        uri:
-          url=https://{{ icinga_ip }}:5665/v1/objects/hosts/{{ hostname }}
+          url=https://{{ icinga_ip }}:5665/v1/objects/hosts/{{ ansible_nodename }}
           method=PUT
           user={{ api_user }}
           password={{ api_pass }}
           headers={'Accept':'application/json'}
-          body='{"templates":["generic-host"],"attrs":{"address":"{{ host_ip }}","check_command":"hostalive","vars.os":"Linux"}}'
+          body='{"templates":["generic-host"],"attrs":{"address":"{{ ansible_default_ipv4.address }}","check_command":"hostalive","vars.os":"Linux"}}'
           validate_certs={{ validate }}
           body_format=json
           status_code=200,500
 
-     - name: Creating Icinga2 services for host {{ hostname }} through API
+     - name: Creating Icinga2 services for host {{ ansible_nodename }} through API
        uri:
-          url=https://{{ icinga_ip }}:5665/v1/objects/services/{{ hostname }}!{{ item.name }}
+          url=https://{{ icinga_ip }}:5665/v1/objects/services/{{ ansible_nodename }}!{{ item.name }}
           method=PUT
           user={{ api_user }}
           password={{ api_pass }}
