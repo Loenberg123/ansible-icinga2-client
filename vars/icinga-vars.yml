@@ -1,6 +1,5 @@
 icinga_ip: 192.168.202.44
 host_ip: "{{ ansible_default_ipv4.address }}"
-hostname: "{{ ansible_hostname }}"
 api_user: root
 api_pass: root
 checks_path: "/usr/lib/nagios/plugins/"
