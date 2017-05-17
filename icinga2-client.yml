@@ -10,6 +10,61 @@
          dir=vars/influx
        when: "'Telegraf' in group_names"
 
+     - name: Include vars if host in Apache group
+       include_vars: 
+         dir=vars/apache
+       when: "'Apache' in group_names"
+
+     - name: Include vars if host in Nginx group
+       include_vars: 
+         dir=vars/nginx
+       when: "'Nginx' in group_names"
+
+     - name: Include vars if host in Mysql group
+       include_vars: 
+         dir=vars/mysql
+       when: "'Mysql' in group_names"
+
+     - name: Include vars if host in Mongo group
+       include_vars: 
+         dir=vars/mongo
+       when: "'Mongo' in group_names"
+
+     - name: Include vars if host in Redis group
+       include_vars: 
+         dir=vars/redis
+       when: "'Redis' in group_names"
+
+     - name: Include vars if host in Elastic group
+       include_vars: 
+         dir=vars/elastic
+       when: "'Elastic' in group_names"
+
+     - name: Include vars if host in Haproxy group
+       include_vars: 
+         dir=vars/haproxy
+       when: "'Haproxy' in group_names"
+
+     - name: Include vars if host in Hhvm group
+       include_vars: 
+         dir=vars/hhvm
+       when: "'Hhvm' in group_names"
+
+     - name: Include vars if host in Monit group
+       include_vars: 
+         dir=vars/monit
+       when: "'Monit' in group_names"
+
+     - name: Include vars if host in Memcached group
+       include_vars: 
+         dir=vars/memcached
+       when: "'Memcached' in group_names"
+
+     - name: Include vars if host in Php-fpm group
+       include_vars: 
+         dir=vars/phpfpm
+       when: "'Php-fpm' in group_names"
+       
      - name: Ensure that icinga repo exist
        apt_repository:
          repo=ppa:formorer/icinga
@@ -27,6 +82,16 @@
      - name: Install python requests
        pip:
          name=requests state=latest
+
+     - name: Install python nagioscheck
+       pip:
+         name=nagioscheck state=latest
+       when: "'Elastic' in group_names"
+
+     - name: Install pymongo
+       pip:
+         name=pymongo state=latest
+       when: "'Mongo' in group_names"
 
      - name: Update apt cache if too old
        apt:
@@ -83,4 +148,7 @@
 
      - include: tasks/monit-host.yml
        when: "'Monit' in group_names"
+
+     - include: tasks/memcached-host.yml
+       when: "'Memcached' in group_names"
 ...
