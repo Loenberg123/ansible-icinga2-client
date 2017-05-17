@@ -64,7 +64,7 @@
        include_vars: 
          dir=vars/phpfpm
        when: "'Php-fpm' in group_names"
-
+       
      - name: Ensure that icinga repo exist
        apt_repository:
          repo=ppa:formorer/icinga

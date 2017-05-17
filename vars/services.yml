@@ -6,9 +6,7 @@ services:
   - name: disk
     command:
       check_disk -w 30% -c 20%
-  - name: telegraf-input
+  - name: procs
     command:
-      telegraf-noinput.py -Q -i {{ influxdb_ip }} -d {{ influx_db }} -H {{ ansible_hostname }} -t {{ telegraf_time }}
-    plugin:
-      telegraf-noinput.py
+      check_procs
 ...

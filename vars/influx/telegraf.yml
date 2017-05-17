@@ -1,0 +1,6 @@
+telegraf:
+  - name: telegraf-input
+    command:
+      telegraf-noinput.py -Q -i {{ influxdb_ip }} -d {{ influx_db }} -H {{ ansible_hostname }} -t {{ telegraf_time }}
+    plugin:
+      telegraf-noinput.py
