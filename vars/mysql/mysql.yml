@@ -1,0 +1,4 @@
+mysql:
+  - name: mysql
+    command:
+      check_mysql -u root -p root

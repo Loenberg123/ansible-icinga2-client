@@ -1,0 +1,6 @@
+monit:
+  - name: 
+    command:
+      
+    plugin:
+      
