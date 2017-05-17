@@ -2,10 +2,14 @@
 - hosts: all
   vars_files:
       - vars/icinga-vars.yml
-      - vars/influx.yml
       - vars/services.yml
 
   tasks:
+     - name: Include vars if host in Telegraf group
+       include_vars: 
+         dir=vars/influx
+       when: "'Telegraf' in group_names"
+
      - name: Ensure that icinga repo exist
        apt_repository:
          repo=ppa:formorer/icinga
@@ -44,46 +48,39 @@
           body_format=json
           status_code=200,500
 
-     - name: Creating Icinga2 services for host {{ ansible_nodename }} through API
-       uri:
-          url=https://{{ icinga_ip }}:5665/v1/objects/services/{{ ansible_nodename }}!{{ item.name }}
-          method=PUT
-          user={{ api_user }}
-          password={{ api_pass }}
-          headers={'Accept':'application/json'}
-          body='{"templates":["generic-service"],"attrs":{"display_name":"{{ item.name }}","check_command":"dummy","check_interval":"86400","vars.dummy_state":3,"vars.dummy_text":"No Passive Check Result Received"}}'
-          validate_certs={{ validate }}
-          body_format=json
-          status_code=200,500
-       with_items:
-         - "{{ services }}"
+     - include: tasks/generic-host.yml
+       when: "'Linux' in group_names"
 
-     - name: Copy scripts for passive check results
-       template:
-          src=passive-result.py.j2
-          dest={{ checks_path }}passive-{{ item.name }}-result.py
-          mode=0755
-          owner=root
-          group=root
-       with_items:
-         - "{{ services }}"
+     - include: tasks/telegraf-host.yml
+       when: "'Telegraf' in group_names"
 
-     - name: Copy scripts for data collection
-       copy:
-          src={{ scripts_path }}{{ item.plugin }}
-          dest={{ checks_path }}
-          mode=0755
-          owner=root
-          group=root
-       when: item.plugin is defined
-       with_items:
-         - "{{ services }}"
+     - include: tasks/mysql-host.yml
+       when: "'Mysql' in group_names"
 
-     - name: Creating cron jobs for checks
-       cron:
-          name="passive {{ item.name }} checks"
-          job="{{ checks_path }}passive-{{ item.name }}-result.py"
-          state=present
-       with_items:
-         - "{{ services }}"
+     - include: tasks/apache-host.yml
+       when: "'Apache' in group_names"
+
+     - include: tasks/nginx-host.yml
+       when: "'Nginx' in group_names"
+
+     - include: tasks/mongo-host.yml
+       when: "'Mongo' in group_names"
+
+     - include: tasks/elastic-host.yml
+       when: "'Elastic' in group_names"
+
+     - include: tasks/redis-host.yml
+       when: "'Redis' in group_names"
+
+     - include: tasks/haproxy-host.yml
+       when: "'Haproxy' in group_names"
+
+     - include: tasks/phpfpm-host.yml
+       when: "'Php-fpm' in group_names"
+
+     - include: tasks/hhvm-host.yml
+       when: "'Hhvm' in group_names"
+
+     - include: tasks/monit-host.yml
+       when: "'Monit' in group_names"
 ...
