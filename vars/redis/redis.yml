@@ -1,6 +1,0 @@
-redis:
-  - name: redis
-    command:
-      check_redis.py -s {{ ansible_hostname }} -w 400 -c 500
-    plugin:
-      check_redis.py
