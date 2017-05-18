@@ -23,7 +23,7 @@
   with_items:
     - "{{ phpfpm }}"
 
-- name: Copy script for data collection
+- name: Copy script for php-fpm data collection
   copy:
      src={{ scripts_path }}{{ item.plugin }}
      dest={{ checks_path }}
@@ -34,7 +34,7 @@
   with_items:
     - "{{ phpfpm }}"
 
-- name: Creating cron job for check
+- name: Creating cron job for php-fpm check
   cron:
      name="passive {{ item.name }} checks"
      job="{{ checks_path }}passive-{{ item.name }}-result.py"

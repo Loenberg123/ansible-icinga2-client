@@ -1,5 +1,15 @@
 apache:
-  - name: 
+  - name: apache-service
     command:
-
+       check_apache_service.py
     plugin:
+       check_apache_service.py
+  - name: apache-http-{{ apache_ports.stdout_lines }}
+    command:
+       check_http -I {{ ansible_default_ipv4.address }} -p {{ apache_ports.stdout_lines }}
+  - name: apache-status-{{ apache_ports.stdout_lines }}
+    command:
+       check_apachestatus.py -H {{ ansible_default_ipv4.address }} -p {{ apache_ports.stdout_lines }} -m idle
+    plugin:
+       check_apachestatus.py
+

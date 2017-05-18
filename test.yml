@@ -6,11 +6,18 @@
      debug:
         var=group_names
 
-   - name: save checks
+#   - name: save checks
 #     shell: ls /usr/lib/nagios/plugins/ | grep check_
-     shell: service --status-all | grep + | awk -F"]" '{print $2}'
-     register: checks
+#     shell: service --status-all | grep + | awk -F"]" '{print $2}'
+#     register: checks
+#
+#   - name: show services
+#     debug:
+#       var=checks.stdout_lines
+#
+   - name: Get redis ports
+     shell: netstat -putan | grep redis | awk -F ':' '{print $2}' | cut -d" " -f 1 | uniq
+     register: redis_port
 
-   - name: show services
-     debug:
-       var=checks.stdout_lines
+   - debug:
+       var: redis_port

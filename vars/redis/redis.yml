@@ -1,6 +1,6 @@
 redis:
-  - name: redis
+  - name: redis-{{ redis_port.stdout_lines }}
     command:
-      check_redis.py -s {{ ansible_hostname }} -w 400 -c 500
+      check_redis.py -s {{ ansible_hostname }} -p {{ redis_port.stdout_lines }} -w 400 -c 500
     plugin:
       check_redis.py

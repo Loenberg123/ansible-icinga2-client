@@ -1,4 +1,8 @@
 ---
+- name: Get nginx ports
+  shell: netstat -putan | grep nginx | grep -Ev '^(tcp6)' | cut -d: -f2 | cut -d' ' -f1 | uniq
+  register: nginx_ports
+
 - name: Creating Icinga2 nginx service for host {{ ansible_nodename }} through API
   uri:
      url=https://{{ icinga_ip }}:5665/v1/objects/services/{{ ansible_nodename }}!{{ item.name }}
@@ -23,7 +27,7 @@
   with_items:
     - "{{ nginx }}"
 
-- name: Copy script for data collection
+- name: Copy script for nginx data collection
   copy:
      src={{ scripts_path }}{{ item.plugin }}
      dest={{ checks_path }}
@@ -34,7 +38,7 @@
   with_items:
     - "{{ nginx }}"
 
-- name: Creating cron job for check
+- name: Creating cron job for nginx check
   cron:
      name="passive {{ item.name }} checks"
      job="{{ checks_path }}passive-{{ item.name }}-result.py"

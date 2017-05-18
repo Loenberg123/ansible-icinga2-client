@@ -23,7 +23,7 @@
   with_items:
     - "{{ elastic }}"
 
-- name: Copy script for data collection
+- name: Copy script for elastic data collection
   copy:
      src={{ scripts_path }}{{ item.plugin }}
      dest={{ checks_path }}
@@ -34,7 +34,7 @@
   with_items:
     - "{{ elastic }}"
 
-- name: Creating cron job for check
+- name: Creating cron job for elastic check
   cron:
      name="passive {{ item.name }} checks"
      job="{{ checks_path }}passive-{{ item.name }}-result.py"

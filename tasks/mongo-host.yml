@@ -1,4 +1,8 @@
 ---
+- name: Get mongodb ports
+     shell: netstat -putan | grep mongo | awk -F ':' '{print $2}' | cut -d" " -f 1 | uniq
+     register: mongo_port
+
 - name: Creating Icinga2 mongo service for host {{ ansible_nodename }} through API
   uri:
      url=https://{{ icinga_ip }}:5665/v1/objects/services/{{ ansible_nodename }}!{{ item.name }}
@@ -23,7 +27,7 @@
   with_items:
     - "{{ mongo }}"
 
-- name: Copy script for data collection
+- name: Copy script for mongo data collection
   copy:
      src={{ scripts_path }}{{ item.plugin }}
      dest={{ checks_path }}
@@ -34,7 +38,7 @@
   with_items:
     - "{{ mongo }}"
 
-- name: Creating cron job for check
+- name: Creating cron job for mongo check
   cron:
      name="passive {{ item.name }} checks"
      job="{{ checks_path }}passive-{{ item.name }}-result.py"

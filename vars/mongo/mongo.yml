@@ -1,6 +1,6 @@
 mongo:
-  - name: mongo
+  - name: mongo-{{ mongo_port.stdout_lines }}
     command:
-      check_mongodb.py -H {{ ansible_hostname }} -P 27017 -D
+      check_mongodb.py -H {{ ansible_hostname }} -P {{ mongo_port.stdout_lines }} -D
     plugin:
       check_mongodb.py

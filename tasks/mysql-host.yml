@@ -23,7 +23,7 @@
   with_items:
     - "{{ mysql }}"
 
-- name: Copy script for data collection
+- name: Copy script for mysql data collection
   copy:
      src={{ scripts_path }}{{ item.plugin }}
      dest={{ checks_path }}
@@ -34,7 +34,7 @@
   with_items:
     - "{{ mysql }}"
 
-- name: Creating cron job for check
+- name: Creating cron job for mysql check
   cron:
      name="passive {{ item.name }} checks"
      job="{{ checks_path }}passive-{{ item.name }}-result.py"
