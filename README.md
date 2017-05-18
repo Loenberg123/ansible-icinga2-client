@@ -15,12 +15,15 @@ Tested with:
 Tested in:
 - Ubuntu 16.04
 - Ubuntu 14.04
-- Debian jessie
+- Debian Jessie
+- Debian Wheezy
 
 ## Use 
 *Must have login with keys setup*
 
 Run with ansible-playbook icinga2-client.yml --private-key=\<ident-file\> -u \<conection-user\> -i \<target-host-ip\>,
+
+If configured host inventory, call the inventory with -i option
 
 Configure desired environment in vars/icinga-vars.yml and vars/services.yml
 
