@@ -1,0 +1,12 @@
+---
+services:
+  - name: apt
+    command:
+      check_apt
+  - name: disk
+    command:
+      check_disk -w 30% -c 20%
+  - name: procs
+    command:
+      check_procs
+...

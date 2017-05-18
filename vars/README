@@ -1,0 +1,10 @@
+####################################################################################
+###									         ###
+###				CONFIGURATION INSTRUCTIONS			 ###
+###									         ###
+####################################################################################
+
+Set the vars in vars/icinga-vars.yml to your desired values.
+
+In vars/services.yml must define at least name and command for every passive check
+to configure. If the check is a custom made plugin, must also define plugin for it.

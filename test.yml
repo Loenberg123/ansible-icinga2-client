@@ -1,0 +1,16 @@
+---
+- hosts: all
+
+  tasks:
+   - name: Show group_names
+     debug:
+        var=group_names
+
+   - name: save checks
+#     shell: ls /usr/lib/nagios/plugins/ | grep check_
+     shell: service --status-all | grep + | awk -F"]" '{print $2}'
+     register: checks
+
+   - name: show services
+     debug:
+       var=checks.stdout_lines
