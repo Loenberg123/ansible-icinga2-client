@@ -1,6 +1,0 @@
-elastic:
-  - name: elasticsearch
-    command:
-       check_elasticsearch.py
-    plugin:
-       check_elasticsearch.py
