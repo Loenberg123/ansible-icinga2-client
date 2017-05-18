@@ -1,7 +1,7 @@
 ---
 - name: Get mongodb ports
-     shell: netstat -putan | grep mongo | awk -F ':' '{print $2}' | cut -d" " -f 1 | uniq
-     register: mongo_port
+  shell: netstat -putan | grep mongo | awk -F ':' '{print $2}' | cut -d" " -f 1 | uniq
+  register: mongo_port
 
 - name: Creating Icinga2 mongo service for host {{ ansible_nodename }} through API
   uri:

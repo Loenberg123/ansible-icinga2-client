@@ -1,6 +1,6 @@
 ---
 - name: Get nginx ports
-  shell: netstat -putan | grep nginx | grep -Ev '^(tcp6)' | cut -d: -f2 | cut -d' ' -f1 | uniq
+  shell: netstat -putan | grep nginx | grep -Ev '^(tcp6)' | cut -d':' -f2 | cut -d' ' -f1 | uniq
   register: nginx_ports
 
 - name: Creating Icinga2 nginx service for host {{ ansible_nodename }} through API

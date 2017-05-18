@@ -5,13 +5,6 @@
       - vars/services.yml
 
   tasks:
-     - name: Get redis port/s
-       shell: netstat -putan | grep redis | awk -F ':' '{print $2}' | cut -d" " -f 1 | sort | uniq
-       register: redis_port
-
-     - debug:
-         var: redis_port
-
      - name: Include vars if host in Telegraf group
        include_vars: 
          dir=vars/influx

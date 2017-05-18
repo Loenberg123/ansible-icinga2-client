@@ -1,7 +1,7 @@
 haproxy:
-  - name: haproxy-http-{{ haproxy_port.stdout_lines }}
+  - name: haproxy-http-{{ haproxy_port.stdout }}
     command:
-      check_http -i {{ ansible_default_ipv4.address }} -p {{ haproxy_port.stdout_lines }} 
+      check_http -i {{ ansible_default_ipv4.address }} -p {{ haproxy_port.stdout }}
     plugin:
   - name: haproxy-state
     command:

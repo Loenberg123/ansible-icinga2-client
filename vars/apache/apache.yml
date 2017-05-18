@@ -4,12 +4,12 @@ apache:
        check_apache_service.py
     plugin:
        check_apache_service.py
-  - name: apache-http-{{ apache_ports.stdout_lines }}
+  - name: apache-http
     command:
-       check_http -I {{ ansible_default_ipv4.address }} -p {{ apache_ports.stdout_lines }}
-  - name: apache-status-{{ apache_ports.stdout_lines }}
+       check_http -I {{ ansible_default_ipv4.address }} -p {{ apache_ports.stdout }}
+  - name: apache-status
     command:
-       check_apachestatus.py -H {{ ansible_default_ipv4.address }} -p {{ apache_ports.stdout_lines }} -m idle
+       check_apachestatus.py -H {{ ansible_default_ipv4.address }} -p {{ apache_ports.stdout }} -m idle
     plugin:
        check_apachestatus.py
 

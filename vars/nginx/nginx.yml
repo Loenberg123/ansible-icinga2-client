@@ -4,9 +4,9 @@ nginx:
        check_nginx_service.py
     plugin:
        check_nginx_service.py
-  - name: nginx-http-{{ nginx_ports.stdout_lines }}
+  - name: nginx-http
     command:
-       check_http -I {{ ansible_default_ipv4.address }} -p {{ nginx_ports.stdout_lines }}
+       check_http -I {{ ansible_default_ipv4.address }} -p {{ nginx_ports.stdout }}
   - name: nginx-status
     command:
        check_nginx.py -U {{ ansible_default_ipv4.address }} -P /status
