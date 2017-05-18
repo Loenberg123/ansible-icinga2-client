@@ -103,7 +103,7 @@
 
      - name: Create Icinga2 host object through API
        uri:
-          url=https://{{ icinga_ip }}:5665/v1/objects/hosts/{{ ansible_nodename }}
+          url=https://{{ icinga_ip }}:5665/v1/objects/hosts/{{ ansible_hostname }}
           method=PUT
           user={{ api_user }}
           password={{ api_pass }}
