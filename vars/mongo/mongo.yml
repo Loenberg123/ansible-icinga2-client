@@ -1,6 +1,0 @@
-mongo:
-  - name: mongo
-    command:
-      check_mongodb.py -H {{ ansible_hostname }} -P 27017 -D
-    plugin:
-      check_mongodb.py
