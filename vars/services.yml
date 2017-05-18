@@ -6,7 +6,15 @@ services:
   - name: disk
     command:
       check_disk -w 30% -c 20%
+<<<<<<< HEAD
   - name: procs
     command:
       check_procs
+=======
+  - name: telegraf-input
+    command:
+      telegraf-noinput.py -Q -i {{ influxdb_ip }} -d {{ influx_db }} -H {{ hostname }} -t {{ telegraf_time }}
+    plugin:
+      telegraf-noinput.py
+>>>>>>> parent of 41ab681... Add files via upload
 ...
