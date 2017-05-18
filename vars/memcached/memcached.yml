@@ -1,6 +1,0 @@
-memcached:
-  - name: memcached
-    command:
-       check_memcached.sh -h {{ ansible_hostname }} -w 80 -c 90
-    plugin:
-       check_memcached.sh
