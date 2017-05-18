@@ -5,66 +5,6 @@
       - vars/services.yml
 
   tasks:
-     - name: Include vars if host in Telegraf group
-       include_vars: 
-         dir=vars/influx
-       when: "'Telegraf' in group_names"
-
-     - name: Include vars if host in Apache group
-       include_vars: 
-         dir=vars/apache
-       when: "'Apache' in group_names"
-
-     - name: Include vars if host in Nginx group
-       include_vars: 
-         dir=vars/nginx
-       when: "'Nginx' in group_names"
-
-     - name: Include vars if host in Mysql group
-       include_vars: 
-         dir=vars/mysql
-       when: "'Mysql' in group_names"
-
-     - name: Include vars if host in Mongo group
-       include_vars: 
-         dir=vars/mongo
-       when: "'Mongo' in group_names"
-
-     - name: Include vars if host in Redis group
-       include_vars: 
-         dir=vars/redis
-       when: "'Redis' in group_names"
-
-     - name: Include vars if host in Elastic group
-       include_vars: 
-         dir=vars/elastic
-       when: "'Elastic' in group_names"
-
-     - name: Include vars if host in Haproxy group
-       include_vars: 
-         dir=vars/haproxy
-       when: "'Haproxy' in group_names"
-
-     - name: Include vars if host in Hhvm group
-       include_vars: 
-         dir=vars/hhvm
-       when: "'Hhvm' in group_names"
-
-     - name: Include vars if host in Monit group
-       include_vars: 
-         dir=vars/monit
-       when: "'Monit' in group_names"
-
-     - name: Include vars if host in Memcached group
-       include_vars: 
-         dir=vars/memcached
-       when: "'Memcached' in group_names"
-
-     - name: Include vars if host in Php-fpm group
-       include_vars: 
-         dir=vars/phpfpm
-       when: "'Php-fpm' in group_names"
-       
      - name: Ensure that icinga repo exist
        apt_repository:
          repo=ppa:formorer/icinga
@@ -83,16 +23,6 @@
        pip:
          name=requests state=latest
 
-     - name: Install python nagioscheck
-       pip:
-         name=nagioscheck state=latest
-       when: "'Elastic' in group_names"
-
-     - name: Install pymongo
-       pip:
-         name=pymongo state=latest
-       when: "'Mongo' in group_names"
-
      - name: Update apt cache if too old
        apt:
          update_cache=yes cache_valid_time=14400
@@ -103,23 +33,19 @@
 
      - name: Create Icinga2 host object through API
        uri:
-          url=https://{{ icinga_ip }}:5665/v1/objects/hosts/{{ hostname }}
+          url=https://{{ icinga_ip }}:5665/v1/objects/hosts/{{ ansible_hostname }}
           method=PUT
           user={{ api_user }}
           password={{ api_pass }}
           headers={'Accept':'application/json'}
-          body='{"templates":["generic-host"],"attrs":{"address":"{{ host_ip }}","check_command":"hostalive","vars.os":"Linux"}}'
+          body='{"templates":["generic-host"],"attrs":{"address":"{{ ansible_default_ipv4.address }}","check_command":"hostalive","vars.os":"Linux"}}'
           validate_certs={{ validate }}
           body_format=json
           status_code=200,500
 
-<<<<<<< HEAD
-     - include: tasks/generic-host.yml
-       when: "'Linux' in group_names"
-=======
-     - name: Creating Icinga2 services for host {{ hostname }} through API
+     - name: Creating Icinga2 services for host {{ ansible_hostname }} through API
        uri:
-          url=https://{{ icinga_ip }}:5665/v1/objects/services/{{ hostname }}!{{ item.name }}
+          url=https://{{ icinga_ip }}:5665/v1/objects/services/{{ ansible_hostname }}!{{ item.name }}
           method=PUT
           user={{ api_user }}
           password={{ api_pass }}
@@ -151,41 +77,4 @@
        when: item.plugin is defined
        with_items:
          - "{{ services }}"
->>>>>>> parent of c43ffee... Add files via upload
-
-     - include: tasks/telegraf-host.yml
-       when: "'Telegraf' in group_names"
-
-     - include: tasks/mysql-host.yml
-       when: "'Mysql' in group_names"
-
-     - include: tasks/apache-host.yml
-       when: "'Apache' in group_names"
-
-     - include: tasks/nginx-host.yml
-       when: "'Nginx' in group_names"
-
-     - include: tasks/mongo-host.yml
-       when: "'Mongo' in group_names"
-
-     - include: tasks/elastic-host.yml
-       when: "'Elastic' in group_names"
-
-     - include: tasks/redis-host.yml
-       when: "'Redis' in group_names"
-
-     - include: tasks/haproxy-host.yml
-       when: "'Haproxy' in group_names"
-
-     - include: tasks/phpfpm-host.yml
-       when: "'Php-fpm' in group_names"
-
-     - include: tasks/hhvm-host.yml
-       when: "'Hhvm' in group_names"
-
-     - include: tasks/monit-host.yml
-       when: "'Monit' in group_names"
-
-     - include: tasks/memcached-host.yml
-       when: "'Memcached' in group_names"
 ...
