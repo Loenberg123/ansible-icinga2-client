@@ -23,5 +23,5 @@
        var: nginx_port
 
    - local_action: copy content={{ nginx_port.stdout }} dest=./ports.txt
-   - local_action: shell awk '$0="  - port{{':'}} "$0' ./ports.txt > ./nginxports.yml
+   - local_action: shell awk '$0="  port{{':'}} "$0' ./ports.txt > ./nginxports.yml
    - local_action: lineinfile line=ports{{':'}} insertbefore=BOF path=./nginxports.yml

@@ -1,4 +1,4 @@
 ports:
-  - port: 80
-  - port: 81
-  - port: 82
+  port: 80
+  port: 81
+  port: 82
