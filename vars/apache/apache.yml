@@ -1,9 +1,12 @@
 apache:
+#  - name: apache-service
+#    command:
+#       check_apache_service.py
+#    plugin:
+#       check_apache_service.py
   - name: apache-service
     command:
-       check_apache_service.py
-    plugin:
-       check_apache_service.py
+        check_procs -C apache2
   - name: apache-http
     command:
        check_http -I {{ ansible_default_ipv4.address }} -p {{ apache_ports.stdout }}
