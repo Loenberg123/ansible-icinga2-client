@@ -16,8 +16,13 @@
 #       var=checks.stdout_lines
 #
    - name: Get redis ports
-     shell: netstat -putan | grep redis | awk -F ':' '{print $2}' | cut -d" " -f 1 | uniq
-     register: redis_port
+#     shell: netstat -putan | grep redis | awk -F ':' '{print $2}' | cut -d" " -f 1 | uniq
+     shell: netstat -putan | grep nginx | grep -Ev '^(tcp6)' | cut -d':' -f2 | cut -d' ' -f1 | uniq
+     register: nginx_port
 
    - debug:
-       var: redis_port
+       var: nginx_port
+
+   - local_action: copy content={{ nginx_port.stdout }} dest=./ports.txt
+   - local_action: shell awk '$0="  - port{{':'}} "$0' ./ports.txt > ./nginxports.txt
+   - local_action: lineinfile line=nginx{{':'}} insertbefore=BOF path=./nginxports.txt
