@@ -1,7 +1,10 @@
 ---
-- name: Get redis port/s
+- name: Get redis ports
   shell: netstat -putan | grep redis | awk -F ':' '{print $2}' | cut -d" " -f 1 | sort | uniq
-  register: redis-port
+  register: redis-ports
+
+- name: Insert redis ports in vars file
+  local_action: blockinfile block="{% for lines in redis_ports.stdout_lines %}  - name{{':'}} redis-{{ lines }}\n    command{{':'}}\n      check_redis.py -s {{ ansible_hostname }} -p {{ lines }} -w {{ redis_w }} -c {{ redis_c }}\n    plugin:\n      check_redis.py\n{% endfor %}" insertafter="redis:" path=./vars/redis/redis.yml
 
 - name: Creating Icinga2 redis service for host {{ ansible_nodename }} through API
   uri:

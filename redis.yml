@@ -1,1 +1,8 @@
 redis:
+# BEGIN ANSIBLE MANAGED BLOCK
+  - name: redis-6379
+    command:
+      check_redis.py -s server3 -p 6379 -w 400 -c 500
+    plugin:
+      check_redis.py
+# END ANSIBLE MANAGED BLOCK
