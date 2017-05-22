@@ -14,8 +14,4 @@ nginx:
        check_http -I {{ ansible_default_ipv4.address }} -p {{  }}
 
 ports:
-# BEGIN ANSIBLE MANAGED BLOCK
-   port: 80
-   port: 81
-   port: 82
-# END ANSIBLE MANAGED BLOCK
+
