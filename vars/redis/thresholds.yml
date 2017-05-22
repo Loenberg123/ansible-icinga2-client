@@ -1,0 +1,3 @@
+levels:
+ - redis-w: "400"
+ - redis-c: "500"

@@ -9,9 +9,14 @@ nginx:
        check_nginx.sh -H {{ ansible_default_ipv4.address }} -s status
     plugin:
        check_nginx.sh
-  - name: nginx-http
+# BEGIN ANSIBLE MANAGED BLOCK
+  - name: nginx-http-80
     command:
-       check_http -I {{ ansible_default_ipv4.address }} -p {{  }}
-
-ports:
-
+      check_http -I 192.168.202.39 -p 80
+  - name: nginx-http-81
+    command:
+      check_http -I 192.168.202.39 -p 81
+  - name: nginx-http-82
+    command:
+      check_http -I 192.168.202.39 -p 82
+# END ANSIBLE MANAGED BLOCK

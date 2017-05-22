@@ -1,7 +1,13 @@
 ---
 - name: Get apache2 ports
-  shell: netstat -putan | grep apache | awk -F':' '{print $4}'
+  shell: netstat -putan | grep apache2 | cut -d ':' -f 4 | cut -d' ' -f 1 | uniq
   register: apache_ports
+
+- name: Insert apache2 status ports in var file
+  local_action: blockinfile block="{% for lines in apache_ports.stdout_lines %}  - name{{':'}} apache-status-{{ lines }}\n    command{{':'}}\n      check_apachestatus.py -H {{ ansible_default_ipv4.address }} -p {{ lines }} -m idle\n    plugin:\n      check_apachestatus.py{% endfor %}" insertafter="apache_service-py" path=./vars/apache/apache.yml marker="# APACHE STATUS PORTS"
+
+- name: Insert apache2 http ports in var file
+  local_action: blockinfile block="{% for lines in apache_ports.stdout_lines %}  - name{{':'}} apache-http-{{ lines }}\n    command{{':'}}\n      check_http -I {{ ansible_default_ipv4.address }} -p {{ lines }}\n{% endfor %}" insertafter="EOF" path=./vars/apache/apache.yml
 
 - name: Creating Icinga2 apache service for host {{ ansible_nodename }} through API
   uri:
