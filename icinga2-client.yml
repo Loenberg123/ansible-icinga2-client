@@ -23,6 +23,7 @@
        pip:
          name=requests state=latest
 
+<<<<<<< HEAD
      - name: Install python nagioscheck
        pip:
          name=nagioscheck state=latest
@@ -33,6 +34,8 @@
          name=pymongo state=latest
        when: "'Mongo' in group_names"
 
+=======
+>>>>>>> 6ee61338abb57dc32f7fb6cf4ef9d557106b43e5
      - name: Update apt cache if too old
        apt:
          update_cache=yes cache_valid_time=14400
@@ -53,6 +56,7 @@
           body_format=json
           status_code=200,500
 
+<<<<<<< HEAD
      - include: tasks/generic-host.yml
        when: "'Linux' in group_names"
 
@@ -91,4 +95,40 @@
 
      - include: tasks/memcached-host.yml
        when: "'Memcached' in group_names"
+=======
+     - name: Creating Icinga2 services for host {{ ansible_hostname }} through API
+       uri:
+          url=https://{{ icinga_ip }}:5665/v1/objects/services/{{ ansible_hostname }}!{{ item.name }}
+          method=PUT
+          user={{ api_user }}
+          password={{ api_pass }}
+          headers={'Accept':'application/json'}
+          body='{"templates":["generic-service"],"attrs":{"display_name":"{{ item.name }}","check_command":"dummy","check_interval":"86400","vars.dummy_state":3,"vars.dummy_text":"No Passive Check Result Received"}}'
+          validate_certs={{ validate }}
+          body_format=json
+          status_code=200,500
+       with_items:
+         - "{{ services }}"
+
+     - name: Copy scripts for passive check results
+       template:
+          src=passive-result.py.j2
+          dest={{ checks_path }}passive-{{ item.name }}-result.py
+          mode=0755
+          owner=root
+          group=root
+       with_items:
+         - "{{ services }}"
+
+     - name: Copy scripts for data collection
+       copy:
+          src={{ scripts_path }}{{ item.plugin }}
+          dest={{ checks_path }}
+          mode=0755
+          owner=root
+          group=root
+       when: item.plugin is defined
+       with_items:
+         - "{{ services }}"
+>>>>>>> 6ee61338abb57dc32f7fb6cf4ef9d557106b43e5
 ...

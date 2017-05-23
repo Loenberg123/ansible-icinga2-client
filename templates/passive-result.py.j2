@@ -4,12 +4,16 @@ import shlex
 import requests
 
 cmd = "{{ checks_path }}{{ item.command }}"
+<<<<<<< HEAD
 {% if 'Nginx' in group_names %}
 process = Popen(cmd, shell=True, stdout=PIPE)
 {% endif %}
 {% if 'Nginx' not in group_names %}
 process = Popen(shlex.split(cmd,posix=False), stdout=PIPE)
 {% endif %}
+=======
+process = Popen(shlex.split(cmd,posix=False), stdout=PIPE)
+>>>>>>> 6ee61338abb57dc32f7fb6cf4ef9d557106b43e5
 output = process.communicate()[0]
 exit_code = process.wait()
 url = 'https://{{ icinga_ip }}:5665/v1/actions/process-check-result?service={{ ansible_hostname }}!{{ item.name }}'
