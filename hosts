@@ -13,8 +13,12 @@
 #server4 ansible_host=192.168.202.43 ansible_ssh_private_key_file=/root/.ssh/icinga
 
 [Telegraf]
+server3
+server4
 
 [Mysql]
+server3
+server4
 
 [Apache]
 #server4
@@ -26,17 +30,22 @@
 #server4
 
 [Elastic]
+server3 ansible_host=192.168.202.39 ansible_ssh_private_key_file=/root/.ssh/icinga
+server4 ansible_host=192.168.202.43 ansible_ssh_private_key_file=/root/.ssh/icinga
 
 [Redis]
-server3 ansible_host=192.168.202.39 ansible_ssh_private_key_file=/root/.ssh/icinga
+#server3 ansible_host=192.168.202.39 ansible_ssh_private_key_file=/root/.ssh/icinga
 
 [Haproxy]
 #icinga2 ansible_host=192.168.202.44 ansible_ssh_private_key_file=/root/.ssh/icinga
 
 [Php-fpm]
+server4
 
 [Hhvm]
 
 [Monit]
 
 [Memcached]
+server3
+server4
