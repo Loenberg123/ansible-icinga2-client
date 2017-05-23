@@ -4,7 +4,7 @@
   register: nginx_port
 
 - name: Writing ports to nginx var file
-  local_action: blockinfile block="{% for lines in nginx_port.stdout_lines %}  - name{{':'}} nginx-http-{{ lines }}\n    command{{':'}}\n      check_http -I {{ ansible_default_ipv4.address }} -p {{ lines }}\n{% endfor %}" insertafter="nginx.sh" path=./vars/nginx/nginx.yml
+  local_action: blockinfile block="{% for lines in nginx_port.stdout_lines %}  - name{{':'}} nginx-http-{{ lines }}\n    command{{':'}}\n      check_http -I {{ ansible_default_ipv4.address }} -p {{ lines }}\n{% endfor %}" insertafter="nginx:" path=./vars/nginx/nginx.yml
 
 - name: Creating Icinga2 nginx service for host {{ ansible_nodename }} through API
   uri:

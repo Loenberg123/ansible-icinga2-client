@@ -1,11 +1,11 @@
 haproxy:
-  - name: haproxy-http-{{ haproxy_port.stdout }}
+# BEGIN ANSIBLE MANAGED BLOCK
+  - name: haproxy-http-81
     command:
-      check_http -i {{ ansible_default_ipv4.address }} -p {{ haproxy_port.stdout }}
-    plugin:
+      check_http -I 192.168.202.44 -p 81
+# END ANSIBLE MANAGED BLOCK
   - name: haproxy-state
     command:
       check_haproxy_state.py
     plugin:
       check_haproxy_state.py
-

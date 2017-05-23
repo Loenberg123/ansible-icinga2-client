@@ -1,7 +1,10 @@
 ---
 - name: Get mongodb ports
-  shell: netstat -putan | grep mongo | awk -F ':' '{print $2}' | cut -d" " -f 1 | uniq
-  register: mongo_port
+  shell: netstat -putan | grep mongod | cut -d':' -f 2 | cut -d' ' -f1 | sort | uniq
+  register: mongo_ports
+
+- name: Write ports to mongo var file
+  local_action: blockinfile block="{% for lines in mongo_ports.stdout_lines %}  - name{{':'}} mongod-{{ lines }}\n    command{{':'}}\n      check_mongodb.py -H {{ ansible_default_ipv4.address }} -P {{ lines }} -D\n    plugin:\n      check_mongodb.py\n{% endfor %}" insertafter="mongo:" path=./vars/mongo/mongo.yml
 
 - name: Creating Icinga2 mongo service for host {{ ansible_nodename }} through API
   uri:

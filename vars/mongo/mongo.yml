@@ -1,6 +1,8 @@
 mongo:
-  - name: mongo
+# BEGIN ANSIBLE MANAGED BLOCK
+  - name: mongod-27017
+    command:
+      check_mongodb.py -H 192.168.202.43 -P 27017 -D
     plugin:
       check_mongodb.py
-    command:
-      check_mongodb.py -H {{ ansible_hostname }} -P {{ mongo_port.stdout }} -D
+# END ANSIBLE MANAGED BLOCK
