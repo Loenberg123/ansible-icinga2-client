@@ -1,12 +1,4 @@
 haproxy:
-# BEGIN ANSIBLE MANAGED BLOCK
-  - name: haproxy-backend-apache
-    command:
-      check_http -I 192.168.202.43 -p 80
-  - name: haproxy-backend-nginx
-    command:
-      check_http -I 192.168.202.39 -p 80
-# END ANSIBLE MANAGED BLOCK
   - name: haproxy-state
     command:
       check_haproxy_state.py

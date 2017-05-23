@@ -4,34 +4,3 @@ apache:
        check_apache_service.py
     plugin:
        check_apache_service.py
-# APACHE STATUS PORTS
-  - name: apache-status-80
-    command:
-      check_apachestatus.py -H 192.168.202.43 -p 80 -m idle
-    plugin:
-      check_apachestatus.py
-# APACHE STATUS PORTS
-  - name: apache-status-80
-    command:
-      check_apachestatus.py -H 192.168.202.43 -p 80 -m idle
-    plugin:
-      check_apachestatus.py
-# APACHE STATUS PORTS
-  - name: apache-status-80
-    command:
-      check_apachestatus.py -H 192.168.202.43 -p 80 -m idle
-    plugin:
-      check_apachestatus.py
-# APACHE STATUS PORTS
-# BEGIN ANSIBLE MANAGED BLOCK
-  - name: apache-http-80
-    command:
-      check_http -I 192.168.202.43 -p 80
-# END ANSIBLE MANAGED BLOCK
-# BEGIN APACHE STATUS PORTS
-  - name: apache-status-80
-    command:
-      check_apachestatus.py -H 192.168.202.43 -p 80 -m idle
-    plugin:
-      check_apachestatus.py
-# END APACHE STATUS PORTS

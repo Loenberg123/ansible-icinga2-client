@@ -1,4 +1,16 @@
 ---
+- name: Get hhvm_port/hhvm_socket
+  include_vars:
+     file=../vars/hhvm/hhvm-vars.yml
+
+- name: Define command for hhvm tcp check
+  local_action: blockinfile block="  - name{{':'}} hhvm-tcp\n    command{{':'}}\n       check_tcp -H 127.0.0.1 -p {{ hhvm_port }}\n" insertafter="hhvm:" path=./vars/hhvm/hhvm.yml
+  when: hhvm_port is defined
+
+- name: Define command for hhvm socket check
+  local_action: blockinfile block="  - name{{':'}} hhvm-sock\n    command{{':'}}\n       check_tcp -H {{ hhvm_socket }}\n" insertafter="hhvm:" path=./vars/hhvm/hhvm.yml
+  when: hhvm_socket is defined
+
 - name: Include hhvm var files
   include_vars:
      dir=../vars/hhvm
