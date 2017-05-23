@@ -1,0 +1,6 @@
+apache:
+  - name: apache-service
+    command:
+       check_apache_service.py
+    plugin:
+       check_apache_service.py

@@ -1,0 +1,6 @@
+haproxy:
+  - name: haproxy-state
+    command:
+      check_haproxy_state.py
+    plugin:
+      check_haproxy_state.py

@@ -1,0 +1,6 @@
+monit:
+  - name: monit
+    command:
+       check_monit.py -H {{ ansible_default_ipv4.address }}-u {{ monit_user }} -P {{ monit_pass }}
+    plugin:
+       check_monit.py

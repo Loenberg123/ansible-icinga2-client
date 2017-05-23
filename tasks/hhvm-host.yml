@@ -1,0 +1,59 @@
+---
+- name: Get hhvm_port/hhvm_socket
+  include_vars:
+     file=../vars/hhvm/hhvm-vars.yml
+
+- name: Define command for hhvm tcp check
+  local_action: blockinfile block="  - name{{':'}} hhvm-tcp\n    command{{':'}}\n       check_tcp -H 127.0.0.1 -p {{ hhvm_port }}\n" insertafter="hhvm:" path=./vars/hhvm/hhvm.yml
+  when: hhvm_port is defined
+
+- name: Define command for hhvm socket check
+  local_action: blockinfile block="  - name{{':'}} hhvm-sock\n    command{{':'}}\n       check_tcp -H {{ hhvm_socket }}\n" insertafter="hhvm:" path=./vars/hhvm/hhvm.yml
+  when: hhvm_socket is defined
+
+- name: Include hhvm var files
+  include_vars:
+     dir=../vars/hhvm
+
+- name: Creating Icinga2 hhvm service for host {{ ansible_nodename }} through API
+  uri:
+     url=https://{{ icinga_ip }}:5665/v1/objects/services/{{ ansible_nodename }}!{{ item.name }}
+     method=PUT
+     user={{ api_user }}
+     password={{ api_pass }}
+     headers={'Accept':'application/json'}
+     body='{"templates":["generic-service"],"attrs":{"display_name":"{{ item.name }}","check_command":"dummy","check_interval":"86400","vars.dummy_state":3,"vars.dummy_text":"No Passive Check Result Received"}}'
+     validate_certs={{ validate }}
+     body_format=json
+     status_code=200,500
+  with_items:
+    - "{{ hhvm }}"
+
+- name: Copy script for hhvm passive check result
+  template:
+     src=passive-result.py.j2
+     dest={{ checks_path }}passive-{{ item.name }}-result.py
+     mode=0755
+     owner=root
+     group=root
+  with_items:
+    - "{{ hhvm }}"
+
+- name: Copy script for hhvm data collection
+  copy:
+     src={{ scripts_path }}{{ item.plugin }}
+     dest={{ checks_path }}
+     mode=0755
+     owner=root
+     group=root
+  when: item.plugin is defined
+  with_items:
+    - "{{ hhvm }}"
+
+- name: Creating cron job for hhvm check
+  cron:
+     name="passive {{ item.name }} checks"
+     job="{{ checks_path }}passive-{{ item.name }}-result.py"
+     state=present
+  with_items:
+    - "{{ hhvm }}"

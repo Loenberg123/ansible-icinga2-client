@@ -1,0 +1,69 @@
+---
+- name: Get haproxy port
+  shell: grep -A 10 'frontend' /etc/haproxy/haproxy.cfg | grep bind | cut -d':' -f2
+  register: haproxy_port
+
+- name: Get backends ip
+  shell: grep -A 15 'backend' /etc/haproxy/haproxy.cfg | grep server | cut -d':' -f 1 | cut -d' ' -f 4
+  register: backends_address
+
+- name: Get backends names
+  shell: grep -A 15 'backend' /etc/haproxy/haproxy.cfg | grep server | cut -d':' -f 1 | cut -d' ' -f 2
+  register: backends_names
+
+- name: Get backends ports
+  shell: grep -A 15 'backend' /etc/haproxy/haproxy.cfg | grep server | cut -d':' -f 2 | cut -d' ' -f1
+  register: backend_ports
+
+- name: Write ports to haproxy var file
+  local_action: blockinfile block="{% for lines in haproxy_port.stdout_lines %}  - name{{':'}} haproxy-http-{{ lines }}\n    command{{':'}}\n      check_http -I {{ ansible_default_ipv4.address }} -p {{ lines }}\n{% endfor %}" insertafter="haproxy:" path=./vars/haproxy/haproxy.yml
+
+- name: Write backends to haproxy var file
+  local_action: blockinfile block="{% for n in range(0,backends_address.stdout_lines|length) %}  - name{{':'}} haproxy-backend-{{ backends_names.stdout_lines[n] }}\n    command{{':'}}\n      check_http -I {{ backends_address.stdout_lines[n] }} -p {{ backend_ports.stdout_lines[n] }}\n{% endfor %}" insertafter=EOF path=./vars/haproxy/haproxy.yml
+
+- name: Including var file
+  include_vars:
+    dir=../vars/haproxy
+
+- name: Creating Icinga2 haproxy service for host {{ ansible_nodename }} through API
+  uri:
+     url=https://{{ icinga_ip }}:5665/v1/objects/services/{{ ansible_nodename }}!{{ item.name }}
+     method=PUT
+     user={{ api_user }}
+     password={{ api_pass }}
+     headers={'Accept':'application/json'}
+     body='{"templates":["generic-service"],"attrs":{"display_name":"{{ item.name }}","check_command":"dummy","check_interval":"86400","vars.dummy_state":3,"vars.dummy_text":"No Passive Check Result Received"}}'
+     validate_certs={{ validate }}
+     body_format=json
+     status_code=200,500
+  with_items:
+    - "{{ haproxy }}"
+
+- name: Copy script for haproxy passive check result
+  template:
+     src=passive-result.py.j2
+     dest={{ checks_path }}passive-{{ item.name }}-result.py
+     mode=0755
+     owner=root
+     group=root
+  with_items:
+    - "{{ haproxy }}"
+
+- name: Copy script for haproxy data collection
+  copy:
+     src={{ scripts_path }}{{ item.plugin }}
+     dest={{ checks_path }}
+     mode=0755
+     owner=root
+     group=root
+  when: item.plugin is defined
+  with_items:
+    - "{{ haproxy }}"
+
+- name: Creating cron job for haproxy check
+  cron:
+     name="passive {{ item.name }} checks"
+     job="{{ checks_path }}passive-{{ item.name }}-result.py"
+     state=present
+  with_items:
+    - "{{ haproxy }}"

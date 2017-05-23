@@ -1,0 +1,57 @@
+---
+- name: Get apache2 ports
+  shell: netstat -putan | grep apache2 | cut -d ':' -f 4 | cut -d' ' -f 1 | uniq
+  register: apache_ports
+
+- name: Insert apache2 status ports in var file
+  local_action: blockinfile block="{% for lines in apache_ports.stdout_lines %}  - name{{':'}} apache-status-{{ lines }}\n    command{{':'}}\n      check_apachestatus.py -H {{ ansible_default_ipv4.address }} -p {{ lines }} -m idle\n    plugin:\n      check_apachestatus.py{% endfor %}" insertafter="apache_service-py" path=./vars/apache/apache.yml marker="# {mark} APACHE STATUS PORTS"
+
+- name: Insert apache2 http ports in var file
+  local_action: blockinfile block="{% for lines in apache_ports.stdout_lines %}  - name{{':'}} apache-http-{{ lines }}\n    command{{':'}}\n      check_http -I {{ ansible_default_ipv4.address }} -p {{ lines }}\n{% endfor %}" insertafter="EOF" path=./vars/apache/apache.yml
+
+- name: Include apache2 var files
+  include_vars:
+     dir=../vars/apache
+
+- name: Creating Icinga2 apache service for host {{ ansible_nodename }} through API
+  uri:
+     url=https://{{ icinga_ip }}:5665/v1/objects/services/{{ ansible_nodename }}!{{ item.name }}
+     method=PUT
+     user={{ api_user }}
+     password={{ api_pass }}
+     headers={'Accept':'application/json'}
+     body='{"templates":["generic-service"],"attrs":{"display_name":"{{ item.name }}","check_command":"dummy","check_interval":"86400","vars.dummy_state":3,"vars.dummy_text":"No Passive Check Result Received"}}'
+     validate_certs={{ validate }}
+     body_format=json
+     status_code=200,500
+  with_items:
+    - "{{ apache }}"
+
+- name: Copy script for apache passive check result
+  template:
+     src=passive-result.py.j2
+     dest={{ checks_path }}passive-{{ item.name }}-result.py
+     mode=0755
+     owner=root
+     group=root
+  with_items:
+    - "{{ apache }}"
+
+- name: Copy script for apache data collection
+  copy:
+     src={{ scripts_path }}{{ item.plugin }}
+     dest={{ checks_path }}
+     mode=0755
+     owner=root
+     group=root
+  when: item.plugin is defined
+  with_items:
+    - "{{ apache }}"
+
+- name: Creating cron job for apache check
+  cron:
+     name="passive {{ item.name }} checks"
+     job="{{ checks_path }}passive-{{ item.name }}-result.py"
+     state=present
+  with_items:
+    - "{{ apache }}"
