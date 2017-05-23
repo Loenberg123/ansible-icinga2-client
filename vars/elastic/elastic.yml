@@ -1,6 +1,6 @@
 elastic:
   - name: elasticsearch
     command:
-       check_elasticsearch.py -H {{ ansible_default_ipv4.address }}
+       check_elasticsearch.py
     plugin:
        check_elasticsearch.py

@@ -1,0 +1,9 @@
+#########################################################################################
+#											#
+#	If you want to check over tcp, uncomment hhvm_port and set port			#
+#	For checks over unix socket, uncomment hhvm_socket and set to socket path	#
+#											#
+#########################################################################################
+
+#hhvm_port: 9000
+hhvm_socket: /var/run/hhvm/hhvm.sock

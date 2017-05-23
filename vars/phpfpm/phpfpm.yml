@@ -1,6 +1,6 @@
 phpfpm:
   - name: phpfpm-status
     command:
-      check_php-fpm.sh -h {{ ansible_default_ipv4.address }} -s /status
+      check_php-fpm.sh -h {{ ansible_default_ipv4.address }} -p {{ apache_ports.stdout_lines|nginx_ports.stdout_lines }} -s /status
     plugin:
       check_php-fpm.sh

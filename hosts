@@ -25,6 +25,10 @@
 [Elastic]
 
 [Redis]
+<<<<<<< HEAD
+=======
+server3 ansible_host=192.168.202.39 ansible_ssh_private_key_file=/root/.ssh/icinga
+>>>>>>> parent of e27c852... updated tasks and var definitions
 
 [Haproxy]
 
