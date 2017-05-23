@@ -4,9 +4,3 @@ api_pass: root
 checks_path: "/usr/lib/nagios/plugins/"
 validate: no
 scripts_path: scripts/
-<<<<<<< HEAD
-=======
-influxdb_ip: 192.168.202.12
-influx_db: telegraf
-telegraf_time: 50s
->>>>>>> 6ee61338abb57dc32f7fb6cf4ef9d557106b43e5

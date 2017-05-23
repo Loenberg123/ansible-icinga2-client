@@ -9,8 +9,6 @@
 #   - A hostname/ip can be a member of multiple groups
 
 [Linux]
-#server3 ansible_host=192.168.202.39 ansible_ssh_private_key_file=/root/.ssh/icinga
-#server4 ansible_host=192.168.202.43 ansible_ssh_private_key_file=/root/.ssh/icinga
 
 [Telegraf]
 
@@ -25,17 +23,12 @@
 [Elastic]
 
 [Redis]
-<<<<<<< HEAD
-=======
-server3 ansible_host=192.168.202.39 ansible_ssh_private_key_file=/root/.ssh/icinga
->>>>>>> parent of e27c852... updated tasks and var definitions
 
 [Haproxy]
 
 [Php-fpm]
 
 [Hhvm]
-server3 ansible_host=192.168.202.39 ansible_ssh_private_key_file=/root/.ssh/icinga
 
 [Monit]
 

@@ -1,23 +1,17 @@
-<<<<<<< HEAD
 ## TESTING
 This branch is for testing purposes, so it may not even work.
 
 Please use the master branch instead
 
-=======
->>>>>>> 6ee61338abb57dc32f7fb6cf4ef9d557106b43e5
 # ansible-icinga2-client
 Ansible playbook to configure a host client with services for Icinga2
 
 ## Dependencies
-<<<<<<< HEAD
 - python requests
 - python-httplib2
-=======
 - curl in target host
 - python requests in target host
 - python-httplib2 in target host
->>>>>>> 6ee61338abb57dc32f7fb6cf4ef9d557106b43e5
 
 ## Tests
 Tested with: 

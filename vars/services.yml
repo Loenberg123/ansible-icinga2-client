@@ -9,12 +9,4 @@ services:
   - name: procs
     command:
       check_procs
-<<<<<<< HEAD
-=======
-  - name: telegraf-input
-    command:
-      telegraf-noinput.py -Q -i {{ influxdb_ip }} -d {{ influx_db }} -H {{ ansible_hostname }} -t {{ telegraf_time }}
-    plugin:
-      telegraf-noinput.py
->>>>>>> 6ee61338abb57dc32f7fb6cf4ef9d557106b43e5
 ...
