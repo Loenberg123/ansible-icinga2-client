@@ -1,4 +1,8 @@
 ---
+- name: Including telegraf var files
+  include_vars:
+     dir=../vars/influx
+
 - name: Creating Icinga2 telegraf service for host {{ ansible_nodename }} through API
   uri:
      url=https://{{ icinga_ip }}:5665/v1/objects/services/{{ ansible_nodename }}!{{ item.name }}

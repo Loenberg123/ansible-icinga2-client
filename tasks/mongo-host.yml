@@ -6,6 +6,10 @@
 - name: Write ports to mongo var file
   local_action: blockinfile block="{% for lines in mongo_ports.stdout_lines %}  - name{{':'}} mongod-{{ lines }}\n    command{{':'}}\n      check_mongodb.py -H {{ ansible_default_ipv4.address }} -P {{ lines }} -D\n    plugin:\n      check_mongodb.py\n{% endfor %}" insertafter="mongo:" path=./vars/mongo/mongo.yml
 
+- name: Include mongo var files
+  include_vars:
+     dir=../vars/mongo
+
 - name: Creating Icinga2 mongo service for host {{ ansible_nodename }} through API
   uri:
      url=https://{{ icinga_ip }}:5665/v1/objects/services/{{ ansible_nodename }}!{{ item.name }}

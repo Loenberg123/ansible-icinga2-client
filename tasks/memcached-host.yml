@@ -1,4 +1,8 @@
 ---
+- name: Include memcached var files
+  include_vars:
+     dir=../vars/memcached
+
 - name: Creating Icinga2 memcached service for host {{ ansible_nodename }} through API
   uri:
      url=https://{{ icinga_ip }}:5665/v1/objects/services/{{ ansible_nodename }}!{{ item.name }}

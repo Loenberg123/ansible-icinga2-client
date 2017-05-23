@@ -3,8 +3,27 @@
   shell: grep -A 10 'frontend' /etc/haproxy/haproxy.cfg | grep bind | cut -d':' -f2
   register: haproxy_port
 
+- name: Get backends ip
+  shell: grep -A 15 'backend' /etc/haproxy/haproxy.cfg | grep server | cut -d':' -f 1 | cut -d' ' -f 4
+  register: backends_address
+
+- name: Get backends names
+  shell: grep -A 15 'backend' /etc/haproxy/haproxy.cfg | grep server | cut -d':' -f 1 | cut -d' ' -f 2
+  register: backends_names
+
+- name: Get backends ports
+  shell: grep -A 15 'backend' /etc/haproxy/haproxy.cfg | grep server | cut -d':' -f 2 | cut -d' ' -f1
+  register: backend_ports
+
 - name: Write ports to haproxy var file
   local_action: blockinfile block="{% for lines in haproxy_port.stdout_lines %}  - name{{':'}} haproxy-http-{{ lines }}\n    command{{':'}}\n      check_http -I {{ ansible_default_ipv4.address }} -p {{ lines }}\n{% endfor %}" insertafter="haproxy:" path=./vars/haproxy/haproxy.yml
+
+- name: Write backends to haproxy var file
+  local_action: blockinfile block="{% for n in range(0,backends_address.stdout_lines|length) %}  - name{{':'}} haproxy-backend-{{ backends_names.stdout_lines[n] }}\n    command{{':'}}\n      check_http -I {{ backends_address.stdout_lines[n] }} -p {{ backend_ports.stdout_lines[n] }}\n{% endfor %}" insertafter=EOF path=./vars/haproxy/haproxy.yml
+
+- name: Including var file
+  include_vars:
+    dir=../vars/haproxy
 
 - name: Creating Icinga2 haproxy service for host {{ ansible_nodename }} through API
   uri:
