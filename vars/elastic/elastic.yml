@@ -1,6 +1,6 @@
 elastic:
   - name: elasticsearch
     command:
-       bash check_elasticsearch.sh
+       check_elasticsearch.sh
     plugin:
        check_elasticsearch.sh
