@@ -1,4 +1,4 @@
-icinga_ip: 192.168.202.44
+icinga_ip: 127.0.0.1
 api_user: root
 api_pass: root
 checks_path: "/usr/lib/nagios/plugins/"
