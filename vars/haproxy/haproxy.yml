@@ -1,3 +1,5 @@
+# This file is modified by tasks/haproxy-host.yml
+# Check task before editing something
 haproxy:
   - name: haproxy-state
     command:
