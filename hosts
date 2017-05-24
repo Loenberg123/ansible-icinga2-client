@@ -21,7 +21,6 @@
 [Mongo]
 
 [Elastic]
-server3 ansible_host=192.168.202.39 ansible_ssh_keyfile=/root/.ssh/icinga
 
 [Redis]
 
